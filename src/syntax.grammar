@@ -1,0 +1,22 @@
+@top Program { line* }
+
+line { hws* ( LineComment | shortFormat ) ( newline | eof ) }
+
+shortFormat {
+      Timepoint hws*
+    | Timepoint hws+ (Escape hws*)* NoteData
+}
+
+@tokens {
+    Escape      { '\\' }
+    NoteData    { ![ \t] ![\n]* }
+    LineComment { '#' ![\n]* }
+    Timepoint   { integer fraction? }
+    integer     { '0' | $[1-9] @digit* }
+    fraction    { '.' @digit+ }
+    hws         { ' ' | '\t' }
+    newline     { '\n' }
+    eof         { @eof }
+    @precedence { Escape, NoteData }
+    @precedence { NoteData, newline }
+}
