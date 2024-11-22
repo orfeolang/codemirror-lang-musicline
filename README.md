@@ -14,3 +14,8 @@ npm install
 npm run prepare
 npm test
 ```
+
+## License
+
+MIT\
+Copyright 2024 Pierre-Emmanuel Lévesque
