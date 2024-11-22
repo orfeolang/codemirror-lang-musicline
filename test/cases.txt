@@ -14,32 +14,77 @@
 ==>
 
 Program(
-  LineComment, LineComment, LineComment, LineComment, LineComment,
-  LineComment, LineComment, LineComment, LineComment, LineComment
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment
+)
+
+# Long Format
+
+0       0  marker introduction
+0.5     1  note   F♭/D♯        	 
+    1   2  rest
+	1.5 3  rested
+10.50   4  tail        	     
+123.456 10 tempo  90    	     
+0       1 note \   Only color the first \ character.
+1       1 note \ \ Only color the first \ character.
+    1   1 note  \ \
+	1.5 1 note	\1  Only color the first \ character.
+10.50   1 note \\1 Only color the first \ character.    	     
+
+==>
+
+Program(
+    Timepoint, Voice, EventType, EventData,
+    Timepoint, Voice, EventType, EventData,
+    Timepoint, Voice, EventType,
+    Timepoint, Voice, EventType,
+    Timepoint, Voice, EventType,
+    Timepoint, Voice, EventType, EventData,
+    Timepoint, Voice, EventType, EventData,
+    Timepoint, Voice, EventType, EventData,
+    Timepoint, Voice, EventType, EventData,
+    Timepoint, Voice, EventType, EventData,
+    Timepoint, Voice, EventType, EventData
 )
 
 # Short Format
 
 0
+1        	 
 1 note
-1.5 This note is F♭/D♯
-10.50   Data with more than one space before.
-123.456 Data with more than one space after.    
-0     \   Only color the first \ character.
-1     \ \ Only color the first \ character.
-1.5   \1  Only color the first \ character.
-10.50 \\1 Only color the first \ character.
+    1.5 This note is F♭/D♯
+	10.50   Data with more than one space before.
+123.456 Data with more than one space after.        	 
+0       \   Only color the first \ character.
+    1   \ \ Only color the first \ character.
+	1   \ \
+1.5     \1  Only color the first \ character.
+10.50   \\1 Only color the first \ character.
+123.456 \\    	     
+
 
 ==>
 
 Program(
   Timepoint,
+  Timepoint,
   Timepoint, NoteData,
   Timepoint, NoteData,
   Timepoint, NoteData,
   Timepoint, NoteData,
-  Timepoint, Escape, NoteData,
-  Timepoint, Escape, Escape, NoteData,
-  Timepoint, Escape, NoteData,
-  Timepoint, Escape, Escape, NoteData
+  Timepoint, NoteData,
+  Timepoint, NoteData,
+  Timepoint, NoteData,
+  Timepoint, NoteData,
+  Timepoint, NoteData,
+  Timepoint, NoteData
 )

@@ -2,26 +2,32 @@
 
 line {
     hws*
-    ( LineComment | shortFormat )
+    ( LineComment | longFormat | shortFormat )
     ( newline | eof )
 }
 
+longFormat {
+    Timepoint hws+
+    Voice     hws+
+    EventType ( hws* | hws+ EventData )
+}
+
 shortFormat {
-      Timepoint hws*
-    | Timepoint hws+ (Escape hws*)* NoteData
+    Timepoint
+    ( hws* | hws+ NoteData)
 }
 
 @tokens {
-    LineComment { '#' ![\n]* }
-    Escape      { '\\' }
-    NoteData    { ![ \t] ![\n]* }
     Timepoint   { integer fraction? }
+    Voice       { integer }
+
+    EventType   { 'marker' | 'note' | 'rest' | 'rested' | 'tail' | 'tempo' }
+    EventData   { ![ \t\n]    ![\n]* }
+    NoteData    { ![ \t\n0-9] ![\n]* }
+    LineComment { '#'         ![\n]* }
     integer     { '0' | $[1-9] @digit* }
     fraction    { '.' @digit+ }
-    hws         { ' ' | '\t' }
+    hws         { $[ \t] }
     newline     { '\n' }
     eof         { @eof }
-
-    @precedence { Escape, NoteData }
-    @precedence { NoteData, newline }
 }
