@@ -2,32 +2,59 @@
 
 line {
     hws*
-    ( LineComment | longFormat | shortFormat )
+    ( LineComment | longMusiclineFormat | shortMusiclineFormat )
     ( newline | eof )
 }
 
-longFormat {
+longMusiclineFormat {
     Timepoint hws+
     Voice     hws+
-    EventType ( hws* | hws+ EventData )
+    (
+        (
+            EventRestId                        |
+            EventRestedId                      |
+            EventTailId                        |
+            EventTempoId hws+ EventTempoData   |
+            EventMarkerId hws+ EventMarkerData
+        )
+        hws*
+
+        |
+
+        EventNoteId hws+ ( Escape EscapedNoteData | UnescapedNoteData )
+    )
 }
 
-shortFormat {
+shortMusiclineFormat {
     Timepoint
-    ( hws* | hws+ NoteData)
+    ( hws* | hws+ ( Escape EscapedNoteData | UnescapedNoteData ) )
 }
 
 @tokens {
-    Timepoint   { integer fraction? }
-    Voice       { integer }
+    Timepoint         { integer fraction? }
+    Voice             { integer }
 
-    EventType   { 'marker' | 'note' | 'rest' | 'rested' | 'tail' | 'tempo' }
-    EventData   { ![ \t\n]    ![\n]* }
-    NoteData    { ![ \t\n0-9] ![\n]* }
-    LineComment { '#'         ![\n]* }
-    integer     { '0' | $[1-9] @digit* }
-    fraction    { '.' @digit+ }
-    hws         { $[ \t] }
-    newline     { '\n' }
-    eof         { @eof }
+    EventMarkerId     { 'marker' }
+    EventNoteId       { 'note'   }
+    EventRestId       { 'rest'   }
+    EventRestedId     { 'rested' }
+    EventTailId       { 'tail'   }
+    EventTempoId      { 'tempo'  }
+
+    EventMarkerData   { $[a-zA-Z0-9'_.-]* $[a-zA-Z0-9']+ }
+    EventTempoData    { integer fraction? }
+
+    Escape            { '\\' }
+    EscapedNoteData   { $[ \t]* ![ \t\n] ![\n]* }
+    UnescapedNoteData { ![ \t\n0-9]      ![\n]* }
+
+    LineComment       { '#'              ![\n]* }
+
+    integer           { '0' | $[1-9] @digit* }
+    fraction          { '.' @digit+ }
+    hws               { $[ \t] }
+    newline           { '\n' }
+    eof               { @eof }
+
+    @precedence { Escape, UnescapedNoteData }
 }

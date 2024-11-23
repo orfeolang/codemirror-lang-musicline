@@ -1,4 +1,4 @@
-# Line Comments
+# Line Comments ------------------------------------------------------
 
 # This is a comment.
 # This is a comment with spaces after.    
@@ -26,37 +26,7 @@ Program(
     LineComment
 )
 
-# Long Format
-
-0       0  marker introduction
-0.5     1  note   F♭/D♯        	 
-    1   2  rest
-	1.5 3  rested
-10.50   4  tail        	     
-123.456 10 tempo  90    	     
-0       1 note \   Only color the first \ character.
-1       1 note \ \ Only color the first \ character.
-    1   1 note  \ \
-	1.5 1 note	\1  Only color the first \ character.
-10.50   1 note \\1 Only color the first \ character.    	     
-
-==>
-
-Program(
-    Timepoint, Voice, EventType, EventData,
-    Timepoint, Voice, EventType, EventData,
-    Timepoint, Voice, EventType,
-    Timepoint, Voice, EventType,
-    Timepoint, Voice, EventType,
-    Timepoint, Voice, EventType, EventData,
-    Timepoint, Voice, EventType, EventData,
-    Timepoint, Voice, EventType, EventData,
-    Timepoint, Voice, EventType, EventData,
-    Timepoint, Voice, EventType, EventData,
-    Timepoint, Voice, EventType, EventData
-)
-
-# Short Format
+# Short Musicline Format -------------------------------------------------------
 
 0
 1        	 
@@ -71,20 +41,55 @@ Program(
 10.50   \\1 Only color the first \ character.
 123.456 \\    	     
 
+==>
+
+Program(
+    Timepoint,
+    Timepoint,
+    Timepoint, UnescapedNoteData,
+    Timepoint, UnescapedNoteData,
+    Timepoint, UnescapedNoteData,
+    Timepoint, UnescapedNoteData,
+    Timepoint, Escape, EscapedNoteData,
+    Timepoint, Escape, EscapedNoteData,
+    Timepoint, Escape, EscapedNoteData,
+    Timepoint, Escape, EscapedNoteData,
+    Timepoint, Escape, EscapedNoteData,
+    Timepoint, Escape, EscapedNoteData
+)
+
+# Long Musicline Format --------------------------------------------------------
+
+0       0  marker _Euridice's-section-01.02
+0.5     1  note   F♭/D♯        	 
+0.5     1  note   The final approach
+    1   2  rest
+	1.5 3  rested
+10.50   4  tail        	     
+123.456 10 tempo  90    	     
+123.456 10 tempo  90.5
+0       1 note \   Only color the first \ character.
+1       1 note \ \ Only color the first \ character.
+    1   1 note  \ \
+	1.5 1 note	\1  Only color the first \ character.
+10.50   1 note \\1 Only color the first \ character.    	     
+123.456 1 note \\
 
 ==>
 
 Program(
-  Timepoint,
-  Timepoint,
-  Timepoint, NoteData,
-  Timepoint, NoteData,
-  Timepoint, NoteData,
-  Timepoint, NoteData,
-  Timepoint, NoteData,
-  Timepoint, NoteData,
-  Timepoint, NoteData,
-  Timepoint, NoteData,
-  Timepoint, NoteData,
-  Timepoint, NoteData
+    Timepoint, Voice, EventMarkerId, EventMarkerData,
+    Timepoint, Voice, EventNoteId, UnescapedNoteData,
+    Timepoint, Voice, EventNoteId, UnescapedNoteData,
+    Timepoint, Voice, EventRestId,
+    Timepoint, Voice, EventRestedId,
+    Timepoint, Voice, EventTailId,
+    Timepoint, Voice, EventTempoId, EventTempoData,
+    Timepoint, Voice, EventTempoId, EventTempoData,
+    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData,
+    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData,
+    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData,
+    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData,
+    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData,
+    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData
 )

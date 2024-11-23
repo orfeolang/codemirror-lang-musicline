@@ -2,21 +2,29 @@ import { parser } from './syntax.grammar'
 import { LRLanguage, LanguageSupport } from '@codemirror/language'
 import { styleTags, tags as t } from '@lezer/highlight'
 
-export const MusiclineLanguage = LRLanguage.define({
+export const musiclineLanguage = LRLanguage.define({
   parser: parser.configure({
     props: [
       styleTags({
-        LineComment: t.lineComment,
-        Timepoint: t.number,
-        Voice: t.integer,
-        EventType: t.typeName,
-        EventData: t.string,
-        NoteData: t.string,
+        Timepoint:         t.number,
+        Voice:             t.integer,
+        EventMarkerId:     t.number,
+        EventNoteId:       t.number,
+        EventRestId:       t.number,
+        EventRestedId:     t.number,
+        EventTailId:       t.number,
+        EventTempoId:      t.number,
+        EventMarkerData:   t.number,
+        EventTempoData:    t.number,
+        Escape:            t.number,
+        EscapedNoteData:   t.number,
+        UnescapedNoteData: t.number,
+        LineComment:       t.lineComment,
       }),
     ],
   })
 })
 
-export function Musicline() {
-  return new LanguageSupport(MusiclineLanguage)
+export function musicline() {
+  return new LanguageSupport(musiclineLanguage)
 }
