@@ -1,7 +1,7 @@
 {
-  "name": "lang-support-codemirror-musicline",
+  "name": "lang-support-codemirror",
   "version": "0.1.0",
-  "description": "Musicline language support for CodeMirror.",
+  "description": "Orfeo and Musicline language support for CodeMirror.",
   "scripts": {
     "test": "mocha test/test.js",
     "prepare": "rollup -c"
