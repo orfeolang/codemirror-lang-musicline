@@ -1,0 +1,36 @@
+@top Program { errorMessage }
+
+errorMessage {
+    location
+    codeLine
+    message
+    eof
+}
+
+location {
+    ErrorMessageMarker
+    anyChars
+    newline
+}
+
+codeLine {
+    CodeLineIndicator
+    anyCharsButIcons? ( ErrorEjectIcon | ErrorSequenceStartIcon )
+    anyChars
+    newline
+}
+
+message {
+    ( anyChars ( newline | eof ) )+
+}
+
+@tokens {
+    ErrorMessageMarker     { '===OOPS!===' }
+    CodeLineIndicator      { @digit+ '➤' }
+    ErrorEjectIcon         { '⏏' }
+    ErrorSequenceStartIcon { '⭢' }
+    anyCharsButIcons       { ![⏏⭢]+ }
+    anyChars               { ![\n]+ }
+    newline                { '\n' }
+    eof                    { @eof }
+}

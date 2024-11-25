@@ -1,24 +1,25 @@
-import { parser } from './syntax.grammar'
+import { parser as musiclineParser } from './musicline.syntax.grammar'
+import { parser as orfeoErrorParser } from './orfeoError.syntax.grammar'
 import { LRLanguage, LanguageSupport } from '@codemirror/language'
 import { styleTags, tags as t } from '@lezer/highlight'
 
 export const musiclineLanguage = LRLanguage.define({
-  parser: parser.configure({
+  parser: musiclineParser.configure({
     props: [
       styleTags({
         Timepoint:         t.number,
         Voice:             t.integer,
-        EventMarkerId:     t.number,
-        EventNoteId:       t.number,
-        EventRestId:       t.number,
-        EventRestedId:     t.number,
-        EventTailId:       t.number,
-        EventTempoId:      t.number,
-        EventMarkerData:   t.number,
-        EventTempoData:    t.number,
-        Escape:            t.number,
-        EscapedNoteData:   t.number,
-        UnescapedNoteData: t.number,
+        EventMarkerId:     t.heading1,
+        EventNoteId:       t.heading2,
+        EventRestId:       t.heading3,
+        EventRestedId:     t.heading4,
+        EventTailId:       t.heading5,
+        EventTempoId:      t.heading6,
+        EventMarkerData:   t.string,
+        EventTempoData:    t.literal,
+        Escape:            t.escape,
+        EscapedNoteData:   t.list,
+        UnescapedNoteData: t.list,
         LineComment:       t.lineComment,
       }),
     ],
@@ -27,4 +28,21 @@ export const musiclineLanguage = LRLanguage.define({
 
 export function musicline() {
   return new LanguageSupport(musiclineLanguage)
+}
+
+export const orfeoErrorLanguage = LRLanguage.define({
+  parser: orfeoErrorParser.configure({
+    props: [
+      styleTags({
+        ErrorMessageMarker:     t.namespace,
+        CodeLineIndicator:      t.number,
+        ErrorEjectIcon:         t.character,
+        ErrorSequenceStartIcon: t.keyword,
+      }),
+    ],
+  })
+})
+
+export function orfeoError() {
+  return new LanguageSupport(orfeoErrorLanguage)
 }

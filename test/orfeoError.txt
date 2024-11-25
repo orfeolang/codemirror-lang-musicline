@@ -1,0 +1,41 @@
+# With Eject Icon ----------------------------------------------------
+
+===OOPS!=== Error at 1:3
+1➤ ( ⏏@ )
+Empty marker.
+You must write a marker name after the marker sigil ｢@｣.
+
+==>
+
+Program(
+    ErrorMessageMarker,
+    CodeLineIndicator, ErrorEjectIcon
+)
+
+# With Sequence Start Icon Until EOL ---------------------------------
+
+===OOPS!=== Error between 1:1 and EOL
+1➤ ⭢<abc
+Unexpected end of line.
+The note container opened at 1:1 is not closed.
+
+==>
+
+Program(
+    ErrorMessageMarker,
+    CodeLineIndicator, ErrorSequenceStartIcon
+)
+
+# With Sequence Start Icon Until EOF ---------------------------------
+
+===OOPS!=== Error between 1:1 and EOF
+1➤ ⭢#(
+Unexpected end of file.
+The block comment opened at 1:1 is not closed.
+
+==>
+
+Program(
+    ErrorMessageMarker,
+    CodeLineIndicator, ErrorSequenceStartIcon
+)

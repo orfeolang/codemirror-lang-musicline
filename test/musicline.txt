@@ -26,7 +26,7 @@ Program(
     LineComment
 )
 
-# Short Musicline Format -------------------------------------------------------
+# Short Musicline Format ---------------------------------------------
 
 0
 1        	 
@@ -58,7 +58,7 @@ Program(
     Timepoint, Escape, EscapedNoteData
 )
 
-# Long Musicline Format --------------------------------------------------------
+# Long Musicline Format ----------------------------------------------
 
 0       0  marker _Euridice's-section-01.02
 0.5     1  note   F♭/D♯        	 
