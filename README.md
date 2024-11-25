@@ -1,11 +1,11 @@
-# Lang Support CodeMirror Musicline
+# Lang Support CodeMirror
 
-Musicline language support for CodeMirror.
+Orfeo and Musicline language support for CodeMirror.
 
 ## About
 
-This is a lezer grammar for Musicline. It is used by CodeMirror to
-hightlight Musicline code.
+These are lezer grammars for Orfeo and Musicline. They are used
+by CodeMirror to highlight code.
 
 ## Installation
 
