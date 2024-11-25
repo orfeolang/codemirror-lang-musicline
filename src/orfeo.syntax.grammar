@@ -1,0 +1,15 @@
+@top Program { line* }
+
+line {
+    hws*
+    LineComment
+    ( newline | eof )
+}
+
+@tokens {
+    LineComment { '#' ![\n]* }
+
+    hws         { $[ \t] }
+    newline     { '\n' }
+    eof         { @eof }
+}

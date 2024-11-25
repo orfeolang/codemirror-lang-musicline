@@ -1,0 +1,27 @@
+# Line Comments ------------------------------------------------------
+
+# This is a comment.
+# This is a comment with spaces after.    
+# This is a comment with tabs after.		
+# This is a comment with spaces and tabs after. 	  
+    # This is a comment with spaces before.
+		# This is a comment with tabs before.
+ 	  # This is a comment with spaces and tabs before.
+    # This is a comment with spaces around.    
+		# This is a comment with tabs around.		
+ 	  # This is a comment with spaces and tabs before. 	  
+
+==>
+
+Program(
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment,
+    LineComment
+)

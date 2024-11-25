@@ -1,5 +1,7 @@
 import { parser as musiclineParser } from './musicline.syntax.grammar'
+import { parser as orfeoParser } from './orfeo.syntax.grammar'
 import { parser as orfeoErrorParser } from './orfeoError.syntax.grammar'
+
 import { LRLanguage, LanguageSupport } from '@codemirror/language'
 import { styleTags, tags as t } from '@lezer/highlight'
 
@@ -28,6 +30,20 @@ export const musiclineLanguage = LRLanguage.define({
 
 export function musicline() {
   return new LanguageSupport(musiclineLanguage)
+}
+
+export const orfeoLanguage = LRLanguage.define({
+  parser: orfeoParser.configure({
+    props: [
+      styleTags({
+        LineComment: t.lineComment,
+      }),
+    ],
+  })
+})
+
+export function orfeo() {
+  return new LanguageSupport(orfeoLanguage)
 }
 
 export const orfeoErrorLanguage = LRLanguage.define({
