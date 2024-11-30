@@ -9,14 +9,14 @@ errorMessage {
 
 location {
     ErrorMessageMarker
-    anyChars
+    anyChars?
     newline
 }
 
 codeLine {
     CodeLineIndicator
     anyCharsButIcons? ( ErrorEjectIcon | ErrorSequenceStartIcon )
-    anyChars
+    anyChars?
     newline
 }
 
