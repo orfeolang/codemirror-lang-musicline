@@ -36,7 +36,27 @@ export const orfeoLanguage = LRLanguage.define({
   parser: orfeoParser.configure({
     props: [
       styleTags({
-        LineComment: t.lineComment,
+        AtomicComment:          t.comment,
+        BlockComment:           t.blockComment,
+        Duration:               t.number,
+        Marker:                 t.labelName,
+        Metronome:              t.literal,
+        MusicExprOpen:          t.paren,
+        MusicExprClose:         t.paren,
+        MusicExprDuration:      t.attributeValue,
+        Note:                   t.string,
+        NoteBacktick:           t.string,
+        NoteContainer:          t.string,
+        RepeaterDash:           t.character,
+        RepeaterDot:            t.character,
+        Rest:                   t.null,
+        RestifiedNote:          t.comment,
+        RestifiedNoteBacktick:  t.comment,
+        RestifiedNoteContainer: t.comment,
+        RestifiedRepeaterDash:  t.comment,
+        RestifierBackslash:     t.modifier,
+        RhythmDot:              t.arithmeticOperator,
+        RhythmFlag:             t.arithmeticOperator,
       }),
     ],
   })

@@ -1,15 +1,134 @@
-@top Program { line* }
+@top Program { topMusicExpr }
 
-line {
-    hws*
-    LineComment
+topMusicExpr {
+    hws* ( musicExpr | musicExprContent )
     ( newline | eof )
 }
 
-@tokens {
-    LineComment { '#' ![\n]* }
+musicExpr {
+    RestifierBackslash?
+    RhythmFlag*
+    RhythmDot*
+    MusicExprOpen
+        musicExprContent
+    MusicExprClose
+}
 
-    hws         { $[ \t] }
-    newline     { '\n' }
-    eof         { @eof }
+musicExprContent {
+    measureContent
+}
+
+measureContent {
+    ( MusicExprDuration | measureContentToken )
+    ( hws+ measureContentToken )*
+}
+
+measureContentToken {
+    BlockComment
+    | AtomicComment
+    | noteCompound
+    | restifiedNoteCompound
+    | repeaterDashCompound
+    | restifiedRepeaterDashCompound
+    | restCompound
+    | RepeaterDot
+    | Metronome
+    | Marker
+}
+
+noteAlternatives {
+    Note | NoteBacktick | NoteContainer
+}
+
+noteCompound {
+    RhythmFlag* RhythmDot* Duration? noteAlternatives
+}
+
+restifiedNoteAlternatives {
+    RestifiedNote | RestifiedNoteBacktick | RestifiedNoteContainer
+}
+
+restifiedNoteCompound {
+    RestifierBackslash
+    RhythmFlag* RhythmDot* Duration? restifiedNoteAlternatives
+}
+
+repeaterDashCompound {
+    RhythmFlag* RhythmDot* Duration? RepeaterDash
+}
+
+restifiedRepeaterDashCompound {
+    RestifierBackslash
+    RhythmFlag* RhythmDot* Duration? RestifiedRepeaterDash
+}
+
+restCompound {
+    RhythmFlag* RhythmDot* Duration? Rest
+}
+
+@tokens {
+    BlockComment {
+        '#' RestifierBackslash? RhythmFlag* RhythmDot*
+        (
+            '(' ![\)]* ')' |
+            '<' ![\>]* '>' |
+            '[' ![\)]* ']' |
+            '{' ![\}]* '}' |
+            '«' ![\»]* '»' |
+            '⦗' ![\⦘]* '⦘' |
+            '｢' ![\｣]* '｣'
+        )
+    }
+
+    Metronome {
+        $[!♩]
+        $[+-]?
+        metronomeDuration
+        ( 's' | 'seconds' | 'ms' | 'milliseconds' )?
+    }
+
+    MusicExprDuration  { '=' ( 'f' | 'flex' | duration ) }
+
+    AtomicComment      { '#' ![ \t\(\)]* }
+    Marker             { '@' $[a-zA-Z0-9'_.-]* $[a-zA-Z0-9']+ }
+    MusicExprOpen      { '('  }
+    MusicExprClose     { ')'  }
+    RhythmFlag         { '^'  }
+    RhythmDot          { '.'  }
+    RepeaterDot        { '.'  }
+    RestifierBackslash { '\\' }
+    Rest               { '_'  }
+
+    NoteContainer          { '<' ![>]* '>' }
+    RestifiedNoteContainer { '<' ![>]* '>' }
+    Note                   { noteManyChars | noteOneChar }
+    RestifiedNote          { noteManyChars | noteOneChar }
+    NoteBacktick           { '`' ![ \t\(\)]* }
+    RestifiedNoteBacktick  { '`' ![ \t\(\)]* }
+    RepeaterDash           { '-' }
+    RestifiedRepeaterDash  { '-' }
+
+    Duration           { duration }
+    duration           { number ( '/' number )? }
+
+    metronomeDuration  { number ( '/' number )? }
+
+    noteOneChar        { $[a-zA-ZáéíóúÁÉÍÓÚâêîôûÂÊÎÔÛàèùÀÈÙëïüËÏÜçÇñÑ] }
+    noteManyChars      {
+                           $[a-zA-ZáéíóúÁÉÍÓÚâêîôûÂÊÎÔÛàèùÀÈÙëïüËÏÜçÇñÑ'¡¿-]
+                           $[a-zA-ZáéíóúÁÉÍÓÚâêîôûÂÊÎÔÛàèùÀÈÙëïüËÏÜçÇñÑ'\-\[/\]♮♭♯,._0-9]*
+                           $[a-zA-ZáéíóúÁÉÍÓÚâêîôûÂÊÎÔÛàèùÀÈÙëïüËÏÜçÇñÑ'?\]♮♭♯,._0-9!]
+                       }
+
+    number             { integer fraction }
+    integer            { '0' | $[1-9] @digit* }
+    fraction           { '.' @digit+ }
+    hws                { $[ \t] }
+    newline            { '\n' }
+    eof                { @eof }
+
+    @precedence { RepeaterDot, RhythmDot }
+    @precedence { Note, RepeaterDash }
+    @precedence { RestifiedNote, RestifiedRepeaterDash }
+    @precedence { BlockComment, AtomicComment }
 }
