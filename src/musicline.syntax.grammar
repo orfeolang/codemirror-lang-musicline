@@ -2,8 +2,13 @@
 
 line {
     hws*
-    ( LineComment | longMusiclineFormat | shortMusiclineFormat )
+    ( LineComment | shortMusiclineFormat | longMusiclineFormat )
     ( newline | eof )
+}
+
+shortMusiclineFormat {
+    Timepoint
+    ( hws* | hws+ eventNoteData )
 }
 
 longMusiclineFormat {
@@ -11,50 +16,66 @@ longMusiclineFormat {
     Voice     hws+
     (
         (
-            EventRestId                        |
-            EventRestedId                      |
-            EventTailId                        |
-            EventTempoId hws+ EventTempoData   |
             EventMarkerId hws+ EventMarkerData
+            | EventRestId
+            | EventTailId
+            | EventTempoId hws+ EventTempoData
         )
         hws*
 
         |
 
-        EventNoteId hws+ ( Escape EscapedNoteData | UnescapedNoteData )
+        (
+            EventNoteId hws+ eventNoteData
+            | EventRestedId hws+ eventRestedData
+        )
     )
 }
 
-shortMusiclineFormat {
-    Timepoint
-    ( hws* | hws+ ( Escape EscapedNoteData | UnescapedNoteData ) )
+eventNoteData {
+    EventNoteEscapeChar EventNoteEscapedData?
+    | EventNoteUnescapedData
+}
+
+eventRestedData {
+    EventRestedEscapeChar EventRestedEscapedData?
+    | EventRestedUnescapedData
 }
 
 @tokens {
-    Timepoint         { integer fraction? }
-    Voice             { integer }
+    LineComment              { '#' ![\n]* }
 
-    EventMarkerId     { 'marker' }
-    EventNoteId       { 'note'   }
-    EventRestId       { 'rest'   }
-    EventRestedId     { 'rested' }
-    EventTailId       { 'tail'   }
-    EventTempoId      { 'tempo'  }
+    Timepoint                { number }
+    Voice                    { integer }
 
-    EventMarkerData   { $[a-zA-Z0-9'_.-]* $[a-zA-Z0-9']+ }
-    EventTempoData    { integer fraction? }
+    EventMarkerId            { 'marker' }
+    EventNoteId              { 'note' }
+    EventRestId              { 'rest' }
+    EventRestedId            { 'rested' }
+    EventTailId              { 'tail' }
+    EventTempoId             { 'tempo' }
 
-    Escape            { '\\' }
-    EscapedNoteData   { $[ \t]* ![ \t\n] ![\n]* }
-    UnescapedNoteData { ![ \t\n0-9]      ![\n]* }
+    EventMarkerData          { $[a-zA-Z0-9'_.-]* $[a-zA-Z0-9']+ }
+    EventTempoData           { number }
 
-    LineComment       { '#'              ![\n]* }
+    EventNoteEscapeChar      { escape }
+    EventNoteEscapedData     { escapedData }
+    EventNoteUnescapedData   { unescapedData }
 
-    integer           { '0' | $[1-9] @digit* }
-    fraction          { '.' @digit+ }
-    hws               { $[ \t] }
-    newline           { '\n' }
-    eof               { @eof }
+    EventRestedEscapeChar    { escape }
+    EventRestedEscapedData   { escapedData }
+    EventRestedUnescapedData { unescapedData }
 
-    @precedence { Escape, UnescapedNoteData }
+    escape                   { '\\' }
+    escapedData              { $[ \t]* ![ \t\n] ![\n]* }
+    unescapedData            { ![ \t\n0-9]      ![\n]* }
+    number                   { integer fraction? }
+    integer                  { '0' | $[1-9] @digit* }
+    fraction                 { '.' @digit+ }
+    hws                      { $[ \t] }
+    newline                  { '\n' }
+    eof                      { @eof }
+
+    @precedence { EventNoteEscapeChar, EventNoteUnescapedData }
+    @precedence { EventRestedEscapeChar, EventRestedUnescapedData }
 }

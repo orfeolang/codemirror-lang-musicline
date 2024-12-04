@@ -23,7 +23,7 @@ Program(
     LineComment,
     LineComment,
     LineComment,
-    LineComment
+    LineComment,
 )
 
 # Short Musicline Format ---------------------------------------------
@@ -46,16 +46,16 @@ Program(
 Program(
     Timepoint,
     Timepoint,
-    Timepoint, UnescapedNoteData,
-    Timepoint, UnescapedNoteData,
-    Timepoint, UnescapedNoteData,
-    Timepoint, UnescapedNoteData,
-    Timepoint, Escape, EscapedNoteData,
-    Timepoint, Escape, EscapedNoteData,
-    Timepoint, Escape, EscapedNoteData,
-    Timepoint, Escape, EscapedNoteData,
-    Timepoint, Escape, EscapedNoteData,
-    Timepoint, Escape, EscapedNoteData
+    Timepoint, EventNoteUnescapedData,
+    Timepoint, EventNoteUnescapedData,
+    Timepoint, EventNoteUnescapedData,
+    Timepoint, EventNoteUnescapedData,
+    Timepoint, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, EventNoteEscapeChar, EventNoteEscapedData,
 )
 
 # Long Musicline Format ----------------------------------------------
@@ -64,7 +64,7 @@ Program(
 0.5     1  note   F♭/D♯        	 
 0.5     1  note   The final approach
     1   2  rest
-	1.5 3  rested
+	1.5 3  rested This is rested
 10.50   4  tail        	     
 123.456 10 tempo  90    	     
 123.456 10 tempo  90.5
@@ -74,22 +74,34 @@ Program(
 	1.5 1 note	\1  Only color the first \ character.
 10.50   1 note \\1 Only color the first \ character.    	     
 123.456 1 note \\
+0       1 rested \   Only color the first \ character.
+1       1 rested \ \ Only color the first \ character.
+    1   1 rested  \ \
+	1.5 1 rested	\1  Only color the first \ character.
+10.50   1 rested \\1 Only color the first \ character.    	     
+123.456 1 rested \\
 
 ==>
 
 Program(
     Timepoint, Voice, EventMarkerId, EventMarkerData,
-    Timepoint, Voice, EventNoteId, UnescapedNoteData,
-    Timepoint, Voice, EventNoteId, UnescapedNoteData,
+    Timepoint, Voice, EventNoteId, EventNoteUnescapedData,
+    Timepoint, Voice, EventNoteId, EventNoteUnescapedData,
     Timepoint, Voice, EventRestId,
-    Timepoint, Voice, EventRestedId,
+    Timepoint, Voice, EventRestedId, EventRestedUnescapedData,
     Timepoint, Voice, EventTailId,
     Timepoint, Voice, EventTempoId, EventTempoData,
     Timepoint, Voice, EventTempoId, EventTempoData,
-    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData,
-    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData,
-    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData,
-    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData,
-    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData,
-    Timepoint, Voice, EventNoteId, Escape, EscapedNoteData
+    Timepoint, Voice, EventNoteId, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, Voice, EventNoteId, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, Voice, EventNoteId, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, Voice, EventNoteId, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, Voice, EventNoteId, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, Voice, EventNoteId, EventNoteEscapeChar, EventNoteEscapedData,
+    Timepoint, Voice, EventRestedId, EventRestedEscapeChar, EventRestedEscapedData,
+    Timepoint, Voice, EventRestedId, EventRestedEscapeChar, EventRestedEscapedData,
+    Timepoint, Voice, EventRestedId, EventRestedEscapeChar, EventRestedEscapedData,
+    Timepoint, Voice, EventRestedId, EventRestedEscapeChar, EventRestedEscapedData,
+    Timepoint, Voice, EventRestedId, EventRestedEscapeChar, EventRestedEscapedData,
+    Timepoint, Voice, EventRestedId, EventRestedEscapeChar, EventRestedEscapedData,
 )
