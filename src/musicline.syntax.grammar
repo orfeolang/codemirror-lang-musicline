@@ -8,7 +8,7 @@ line {
 
 shortMusiclineFormat {
     Timepoint
-    ( hws* | hws+ eventNoteData )
+    ( hws* | hws+ eventNoteDataShortFormat )
 }
 
 longMusiclineFormat {
@@ -26,15 +26,20 @@ longMusiclineFormat {
         |
 
         (
-            EventNoteId hws+ eventNoteData
+            EventNoteId hws+ eventNoteDataLongFormat
             | EventRestedId hws+ eventRestedData
         )
     )
 }
 
-eventNoteData {
+eventNoteDataShortFormat {
     EventNoteEscapeChar EventNoteEscapedData?
-    | EventNoteUnescapedData
+    | EventNoteUnescapedDataShortFormat
+}
+
+eventNoteDataLongFormat {
+    EventNoteEscapeChar EventNoteEscapedData?
+    | EventNoteUnescapedDataLongFormat
 }
 
 eventRestedData {
@@ -60,15 +65,18 @@ eventRestedData {
 
     EventNoteEscapeChar      { escape }
     EventNoteEscapedData     { escapedData }
-    EventNoteUnescapedData   { unescapedData }
+    EventNoteUnescapedDataShortFormat { unescapedDataShortFormat }
+    EventNoteUnescapedDataLongFormat  { unescapedDataLongFormat }
 
     EventRestedEscapeChar    { escape }
     EventRestedEscapedData   { escapedData }
-    EventRestedUnescapedData { unescapedData }
+    EventRestedUnescapedData { unescapedDataLongFormat }
 
     escape                   { '\\' }
     escapedData              { $[ \t]* ![ \t\n] ![\n]* }
-    unescapedData            { ![ \t\n0-9]      ![\n]* }
+    unescapedDataShortFormat { ![ \t\n0-9]      ![\n]* }
+    unescapedDataLongFormat  { ![ \t\n]         ![\n]* }
+
     number                   { integer fraction? }
     integer                  { '0' | $[1-9] @digit* }
     fraction                 { '.' @digit+ }
@@ -76,6 +84,7 @@ eventRestedData {
     newline                  { '\n' }
     eof                      { @eof }
 
-    @precedence { EventNoteEscapeChar, EventNoteUnescapedData }
+    @precedence { EventNoteEscapeChar, EventNoteUnescapedDataShortFormat }
+    @precedence { EventNoteEscapeChar, EventNoteUnescapedDataLongFormat }
     @precedence { EventRestedEscapeChar, EventRestedUnescapedData }
 }

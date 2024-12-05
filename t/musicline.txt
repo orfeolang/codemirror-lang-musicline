@@ -46,10 +46,10 @@ Program(
 Program(
     Timepoint,
     Timepoint,
-    Timepoint, EventNoteUnescapedData,
-    Timepoint, EventNoteUnescapedData,
-    Timepoint, EventNoteUnescapedData,
-    Timepoint, EventNoteUnescapedData,
+    Timepoint, EventNoteUnescapedDataShortFormat,
+    Timepoint, EventNoteUnescapedDataShortFormat,
+    Timepoint, EventNoteUnescapedDataShortFormat,
+    Timepoint, EventNoteUnescapedDataShortFormat,
     Timepoint, EventNoteEscapeChar, EventNoteEscapedData,
     Timepoint, EventNoteEscapeChar, EventNoteEscapedData,
     Timepoint, EventNoteEscapeChar, EventNoteEscapedData,
@@ -85,8 +85,8 @@ Program(
 
 Program(
     Timepoint, Voice, EventMarkerId, EventMarkerData,
-    Timepoint, Voice, EventNoteId, EventNoteUnescapedData,
-    Timepoint, Voice, EventNoteId, EventNoteUnescapedData,
+    Timepoint, Voice, EventNoteId, EventNoteUnescapedDataLongFormat,
+    Timepoint, Voice, EventNoteId, EventNoteUnescapedDataLongFormat,
     Timepoint, Voice, EventRestId,
     Timepoint, Voice, EventRestedId, EventRestedUnescapedData,
     Timepoint, Voice, EventTailId,
