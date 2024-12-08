@@ -1,36 +1,37 @@
-@top Program { errorMessage }
+@top Program { line* }
 
-errorMessage {
-    location
-    codeLine
-    message
-    eof
+line {
+    ( locationLine | codeLine | messageLine )
+    ( newline | eof )
 }
 
-location {
-    ErrorMessageMarker
-    anyChars?
-    newline
+locationLine {
+    ErrorHeader
+    AnyChars?
 }
 
 codeLine {
-    CodeLineIndicator
-    anyCharsButIcons? ( ErrorEjectIcon | ErrorSequenceStartIcon )
-    anyChars?
-    newline
+    ErrorLineCursor
+    AnyCharsButIcons?
+    ( ErrorIconEjectPoint | ErrorIconSequenceStart )
+    AnyCharsAfterIcons?
 }
 
-message {
-    ( anyChars ( newline | eof ) )+
+messageLine {
+    AnyChars
 }
 
 @tokens {
-    ErrorMessageMarker     { '===OOPS!===' }
-    CodeLineIndicator      { @digit+ '➤' }
-    ErrorEjectIcon         { '⏏' }
-    ErrorSequenceStartIcon { '⭢' }
-    anyCharsButIcons       { ![⏏⭢]+ }
-    anyChars               { ![\n]+ }
+    ErrorHeader            { '===OOPS!===' }
+    ErrorLineCursor        { @digit+ '➤' }
+    ErrorIconEjectPoint    { '⏏' }
+    ErrorIconSequenceStart { '⭢' }
+    AnyCharsButIcons       { ![⏏⭢]+ }
+    AnyCharsAfterIcons     { ![\n]+ }
+    AnyChars               { ![\n]+ }
     newline                { '\n' }
     eof                    { @eof }
+
+    @precedence { ErrorHeader, AnyChars }
+    @precedence { ErrorLineCursor, AnyChars }
 }

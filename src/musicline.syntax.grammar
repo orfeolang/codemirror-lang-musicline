@@ -2,89 +2,90 @@
 
 line {
     hws*
-    ( LineComment | shortMusiclineFormat | longMusiclineFormat )
+    ( LineComment | musiclineFormatShort | musiclineFormatLong )
     ( newline | eof )
 }
 
-shortMusiclineFormat {
+musiclineFormatShort {
     Timepoint
-    ( hws* | hws+ eventNoteDataShortFormat )
+    ( hws* | hws+ eventDataNoteFormatShort )
 }
 
-longMusiclineFormat {
+musiclineFormatLong {
     Timepoint hws+
     Voice     hws+
     (
         (
-            EventMarkerId hws+ EventMarkerData
-            | EventRestId
-            | EventTailId
-            | EventTempoId hws+ EventTempoData
+            EventTypeMarker hws+ EventDataMarker
+
+            | EventTypeRest
+            | EventTypeTail
+            | EventTypeTempo hws+ EventDataTempo
         )
         hws*
 
         |
 
         (
-            EventNoteId hws+ eventNoteDataLongFormat
-            | EventRestedId hws+ eventRestedData
+            EventTypeNote hws+ eventDataNoteFormatLong
+            | EventTypeRested hws+ eventDataRested
         )
     )
 }
 
-eventNoteDataShortFormat {
-    EventNoteEscapeChar EventNoteEscapedData?
-    | EventNoteUnescapedDataShortFormat
+eventDataNoteFormatShort {
+    EventDataNoteEscapeChar EventDataNoteEscaped?
+    | EventDataNoteUnescapedFormatShort
 }
 
-eventNoteDataLongFormat {
-    EventNoteEscapeChar EventNoteEscapedData?
-    | EventNoteUnescapedDataLongFormat
+eventDataNoteFormatLong {
+    EventDataNoteEscapeChar EventDataNoteEscaped?
+    | EventDataNoteUnescapedFormatLong
 }
 
-eventRestedData {
-    EventRestedEscapeChar EventRestedEscapedData?
-    | EventRestedUnescapedData
+eventDataRested {
+    EventDataRestedEscapeChar EventDataRestedEscaped?
+    | EventDataRestedUnescaped
 }
 
 @tokens {
-    LineComment              { '#' ![\n]* }
+    LineComment               { '#' ![\n]* }
 
-    Timepoint                { number }
-    Voice                    { integer }
+    Timepoint                 { number }
+    Voice                     { integer }
 
-    EventMarkerId            { 'marker' }
-    EventNoteId              { 'note' }
-    EventRestId              { 'rest' }
-    EventRestedId            { 'rested' }
-    EventTailId              { 'tail' }
-    EventTempoId             { 'tempo' }
+    EventTypeMarker           { 'marker' }
+    EventTypeNote             { 'note' }
+    EventTypeRest             { 'rest' }
+    EventTypeRested           { 'rested' }
+    EventTypeTail             { 'tail' }
+    EventTypeTempo            { 'tempo' }
 
-    EventMarkerData          { $[a-zA-Z0-9'_.-]* $[a-zA-Z0-9']+ }
-    EventTempoData           { number }
+    EventDataMarker           { $[a-zA-Z0-9'_.-]* $[a-zA-Z0-9']+ }
+    EventDataTempo            { number }
 
-    EventNoteEscapeChar      { escape }
-    EventNoteEscapedData     { escapedData }
-    EventNoteUnescapedDataShortFormat { unescapedDataShortFormat }
-    EventNoteUnescapedDataLongFormat  { unescapedDataLongFormat }
+    EventDataNoteEscapeChar   { escape }
+    EventDataNoteEscaped      { escapedData }
+    EventDataNoteUnescapedFormatShort { unescapedDataFormatShort }
+    EventDataNoteUnescapedFormatLong  { unescapedDataFormatLong }
 
-    EventRestedEscapeChar    { escape }
-    EventRestedEscapedData   { escapedData }
-    EventRestedUnescapedData { unescapedDataLongFormat }
+    EventDataRestedEscapeChar { escape }
+    EventDataRestedEscaped    { escapedData }
+    EventDataRestedUnescaped  { unescapedDataFormatLong }
 
-    escape                   { '\\' }
-    escapedData              { $[ \t]* ![ \t\n] ![\n]* }
-    unescapedDataShortFormat { ![ \t\n0-9]      ![\n]* }
-    unescapedDataLongFormat  { ![ \t\n]         ![\n]* }
+    escape                    { '\\' }
+    escapedData               { $[ \t]* ![ \t\n] ![\n]* }
+    unescapedDataFormatShort  { ![ \t\n0-9]      ![\n]* }
+    unescapedDataFormatLong   { ![ \t\n]         ![\n]* }
 
-    number                   { integer fraction? }
-    integer                  { '0' | $[1-9] @digit* }
-    fraction                 { '.' @digit+ }
-    hws                      { $[ \t] }
-    newline                  { '\n' }
-    eof                      { @eof }
+    number                    { integer fraction? }
+    integer                   { '0' | $[1-9] @digit* }
+    fraction                  { '.' @digit+ }
+    hws                       { $[ \t] }
+    newline                   { '\n' }
+    eof                       { @eof }
 
-    @precedence { EventNoteEscapeChar, EventNoteUnescapedDataShortFormat }
-    @precedence { EventNoteEscapeChar, EventNoteUnescapedDataLongFormat }
-    @precedence { EventRestedEscapeChar, EventRestedUnescapedData }
+    @precedence { EventDataNoteEscapeChar, EventDataNoteUnescapedFormatShort }
+    @precedence { EventDataNoteEscapeChar, EventDataNoteUnescapedFormatLong }
+    @precedence { EventDataRestedEscapeChar, EventDataRestedUnescaped }
 }

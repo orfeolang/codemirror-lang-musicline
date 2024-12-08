@@ -8,8 +8,9 @@ You must write a marker name after the marker sigil ｢@｣.
 ==>
 
 Program(
-    ErrorMessageMarker,
-    CodeLineIndicator, ErrorEjectIcon
+    ErrorHeader, AnyChars
+    ErrorLineCursor, AnyCharsButIcons, ErrorIconEjectPoint, AnyCharsAfterIcons,
+    AnyChars, AnyChars,
 )
 
 # With Sequence Start Icon Until EOL ---------------------------------
@@ -22,8 +23,9 @@ The note container opened at 1:1 is not closed.
 ==>
 
 Program(
-    ErrorMessageMarker,
-    CodeLineIndicator, ErrorSequenceStartIcon
+    ErrorHeader, AnyChars
+    ErrorLineCursor, AnyCharsButIcons, ErrorIconSequenceStart, AnyCharsAfterIcons,
+    AnyChars, AnyChars,
 )
 
 # With Sequence Start Icon Until EOF ---------------------------------
@@ -36,6 +38,36 @@ The block comment opened at 1:1 is not closed.
 ==>
 
 Program(
-    ErrorMessageMarker,
-    CodeLineIndicator, ErrorSequenceStartIcon
+    ErrorHeader, AnyChars
+    ErrorLineCursor, AnyCharsButIcons, ErrorIconSequenceStart, AnyCharsAfterIcons,
+    AnyChars, AnyChars,
+)
+
+# Multiple errors ----------------------------------------------------
+
+===OOPS!=== Error at 1:3
+1➤ ( ⏏@ )
+Empty marker.
+You must write a marker name after the marker sigil ｢@｣.
+===OOPS!=== Error between 1:1 and EOL
+1➤ ⭢<abc
+Unexpected end of line.
+The note container opened at 1:1 is not closed.
+===OOPS!=== Error between 1:1 and EOF
+1➤ ⭢#(
+Unexpected end of file.
+The block comment opened at 1:1 is not closed.
+
+==>
+
+Program(
+    ErrorHeader, AnyChars
+    ErrorLineCursor, AnyCharsButIcons, ErrorIconEjectPoint, AnyCharsAfterIcons,
+    AnyChars, AnyChars,
+    ErrorHeader, AnyChars
+    ErrorLineCursor, AnyCharsButIcons, ErrorIconSequenceStart, AnyCharsAfterIcons,
+    AnyChars, AnyChars,
+    ErrorHeader, AnyChars
+    ErrorLineCursor, AnyCharsButIcons, ErrorIconSequenceStart, AnyCharsAfterIcons,
+    AnyChars, AnyChars,
 )
