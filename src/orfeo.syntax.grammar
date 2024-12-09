@@ -1,24 +1,20 @@
 @top Program { topMusicExpr }
 
 topMusicExpr {
-    hws* ( musicExpr | musicExprContent )
+    hws* ( musicExprContent hws* )?
     ( newline | eof )
 }
 
 musicExpr {
     RestifierBackslash?
-    RhythmFlag*
-    RhythmDot*
+    RhythmFlags?
+    RhythmDots?
     MusicExprOpen
-        musicExprContent
+       musicExprContent
     MusicExprClose
 }
 
 musicExprContent {
-    measureContent
-}
-
-measureContent {
     ( MusicExprDuration | measureContentToken )
     ( hws+ measureContentToken )*
 }
@@ -31,7 +27,6 @@ measureContentToken {
     | repeaterDashCompound
     | restifiedRepeaterDashCompound
     | restCompound
-    | RepeaterDot
     | Metronome
     | Marker
 }
@@ -41,7 +36,7 @@ noteAlternatives {
 }
 
 noteCompound {
-    RhythmFlag* RhythmDot* Duration? noteAlternatives
+    RhythmFlags? RhythmDots? Duration? noteAlternatives
 }
 
 restifiedNoteAlternatives {
@@ -50,25 +45,25 @@ restifiedNoteAlternatives {
 
 restifiedNoteCompound {
     RestifierBackslash
-    RhythmFlag* RhythmDot* Duration? restifiedNoteAlternatives
+    RhythmFlags? RhythmDots? Duration? restifiedNoteAlternatives
 }
 
 repeaterDashCompound {
-    RhythmFlag* RhythmDot* Duration? RepeaterDash
+    RhythmFlags? RhythmDots? Duration? RepeaterDash
 }
 
 restifiedRepeaterDashCompound {
     RestifierBackslash
-    RhythmFlag* RhythmDot* Duration? RestifiedRepeaterDash
+    RhythmFlags? RhythmDots? Duration? RestifiedRepeaterDash
 }
 
 restCompound {
-    RhythmFlag* RhythmDot* Duration? Rest
+    RhythmFlags? RhythmDots? Duration? Rest
 }
 
 @tokens {
     BlockComment {
-        '#' RestifierBackslash? RhythmFlag* RhythmDot*
+        '#' RestifierBackslash? RhythmFlags? RhythmDots?
         (
             '(' ![\)]* ')' |
             '<' ![\>]* '>' |
@@ -83,19 +78,17 @@ restCompound {
     Metronome {
         $[!♩]
         $[+-]?
-        metronomeDuration
+        duration
         ( 's' | 'seconds' | 'ms' | 'milliseconds' )?
     }
 
-    MusicExprDuration  { '=' ( 'f' | 'flex' | duration ) }
-
+    MusicExprDuration  { '=' ( duration | 'f' | 'flex' ) }
     AtomicComment      { '#' ![ \t\(\)]* }
     Marker             { '@' $[a-zA-Z0-9'_.-]* $[a-zA-Z0-9']+ }
-    MusicExprOpen      { '('  }
-    MusicExprClose     { ')'  }
-    RhythmFlag         { '^'  }
-    RhythmDot          { '.'  }
-    RepeaterDot        { '.'  }
+    MusicExprOpen      { '(' }
+    MusicExprClose     { ')' }
+    RhythmFlags        { '^'+ }
+    RhythmDots         { '.'+ }
     RestifierBackslash { '\\' }
     Rest               { '_'  }
 
@@ -111,8 +104,6 @@ restCompound {
     Duration           { duration }
     duration           { number ( '/' number )? }
 
-    metronomeDuration  { number ( '/' number )? }
-
     noteOneChar        { $[a-zA-ZáéíóúÁÉÍÓÚâêîôûÂÊÎÔÛàèùÀÈÙëïüËÏÜçÇñÑ] }
     noteManyChars      {
                            $[a-zA-ZáéíóúÁÉÍÓÚâêîôûÂÊÎÔÛàèùÀÈÙëïüËÏÜçÇñÑ'¡¿-]
@@ -120,14 +111,13 @@ restCompound {
                            $[a-zA-ZáéíóúÁÉÍÓÚâêîôûÂÊÎÔÛàèùÀÈÙëïüËÏÜçÇñÑ'?\]♮♭♯,._0-9!]
                        }
 
-    number             { integer fraction }
+    number             { integer fraction? }
     integer            { '0' | $[1-9] @digit* }
     fraction           { '.' @digit+ }
     hws                { $[ \t] }
     newline            { '\n' }
     eof                { @eof }
 
-    @precedence { RepeaterDot, RhythmDot }
     @precedence { Note, RepeaterDash }
     @precedence { RestifiedNote, RestifiedRepeaterDash }
     @precedence { BlockComment, AtomicComment }

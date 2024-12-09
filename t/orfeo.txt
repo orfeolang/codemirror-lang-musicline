@@ -1,27 +1,89 @@
-# Line Comments ------------------------------------------------------
+# MusicExprDuration --------------------------------------------------
 
-# This is a comment.
-# This is a comment with spaces after.    
-# This is a comment with tabs after.		
-# This is a comment with spaces and tabs after. 	  
-    # This is a comment with spaces before.
-		# This is a comment with tabs before.
- 	  # This is a comment with spaces and tabs before.
-    # This is a comment with spaces around.    
-		# This is a comment with tabs around.		
- 	  # This is a comment with spaces and tabs before. 	  
+=4 note
 
 ==>
 
 Program(
-    LineComment,
-    LineComment,
-    LineComment,
-    LineComment,
-    LineComment,
-    LineComment,
-    LineComment,
-    LineComment,
-    LineComment,
-    LineComment
+    MusicExprDuration, Note
+)
+
+# AtomicComment ------------------------------------------------------
+
+#note
+
+==>
+
+Program(
+    AtomicComment
+)
+
+# MusicExpr ----------------------------------------------------------
+
+( )
+
+==>
+
+Program(
+    MusicExprOpen, MusicExprClose
+)
+
+# Metronome ----------------------------------------------------------
+
+!4 !4/4 !4.5/4.5 !+4 !-4 !+4.5/4s !+0/4seconds !+4.5/4ms !+0/4milliseconds !4s ♩5s
+
+==>
+
+Program(
+    Metronome, Metronome, Metronome, Metronome, Metronome, Metronome, Metronome, Metronome, Metronome, Metronome, Metronome
+)
+
+# Marker -------------------------------------------------------------
+
+@marker
+
+==>
+
+Program(
+    Marker
+)
+
+# Notes --------------------------------------------------------------
+
+note <note> `note
+
+==>
+
+Program(
+    Note, NoteContainer, NoteBacktick
+)
+
+# RhythmFlags --------------------------------------------------------
+
+^^^note
+
+==>
+
+Program(
+    RhythmFlags, Note
+)
+
+# RhythmDots ---------------------------------------------------------
+
+...note
+
+==>
+
+Program(
+    RhythmDots, Note
+)
+
+# RhythmFlags/Dots ---------------------------------------------------
+
+^^^...note
+
+==>
+
+Program(
+    RhythmFlags, RhythmDots, Note
 )
